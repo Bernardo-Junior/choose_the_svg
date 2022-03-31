@@ -1,80 +1,162 @@
 import 'package:choose_the_svg/svg/svg_data.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SvgScreen extends StatelessWidget {
   const SvgScreen({Key? key}) : super(key: key);
 
-  List<Widget> _buildBody() {
+  List<Widget> _buildBody(BuildContext context) {
     final List<Widget> bodyParts = List<Widget>.filled(
       BodySvgData.values.length,
       const Text(''),
       growable: true,
     );
     for (int i = 0; i < BodySvgData.values.length; i++) {
-      bodyParts[i] = _buildBodyPart(BodySvgData.values[i]);
+      bodyParts[i] = _buildBodyPart(BodySvgData.values[i], context);
     }
     return bodyParts;
   }
 
-  Widget _buildBodyPart(BodySvgData bodyParts) {
-    return ClipPath(
-      child: Stack(
-        children: <Widget>[
-          CustomPaint(
-            size: const Size(double.infinity, double.infinity),
-            painter: PathPainter(
-              bodyParts,
-            ),
-            child: const FittedBox(),
-          ),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {},
-              child: Container(
-                //0xFFFF605E
-                color: Colors.transparent,
+  Widget _buildBodyPart(BodySvgData bodyParts, BuildContext context) {
+    return FittedBox(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 600,
+        child: ClipPath(
+          clipBehavior: Clip.hardEdge,
+          child: Stack(
+            children: <Widget>[
+              CustomPaint(
+                size: const Size(double.infinity, double.infinity),
+                painter: PathPainter(
+                  bodyParts,
+                ),
+                child: const FittedBox(),
               ),
-            ),
-          )
-        ],
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    //0xFFFF605E
+                    color: Colors.transparent,
+                  ),
+                ),
+              )
+            ],
+          ),
+          clipper: PathClipper(bodyParts),
+        ),
       ),
-      clipper: PathClipper(bodyParts),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return Scaffold(
       body: SizedBox(
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: ClipPath(
-            child: Container(
-              padding: EdgeInsets.only(right: 200),
-              child: ClipRRect(
-                clipBehavior: Clip.hardEdge,
-                child: Container(
-                  color: Colors.red,
-                  width: 0,
-                  height: 500,
-                  padding: EdgeInsets.only(
-                    right: 10,
-                  ),
-                  child: ClipRRect(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Stack(
-                      children: [
-                        ..._buildBody(),
-                      ],
-                    ),
+        child: Stack(
+          children: [
+            Positioned(
+              right: 0,
+              left: (MediaQuery.of(context).size.width / 3),
+              top: 20,
+              bottom: 0,
+              child: const Text(
+                'Selecione a parte que você quer customizar:',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            ..._buildBody(context),
+            Positioned(
+              right: 0,
+              left: (MediaQuery.of(context).size.width * 0.7),
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                margin: const EdgeInsets.only(top: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue,
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
