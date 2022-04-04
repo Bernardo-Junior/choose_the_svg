@@ -3,6 +3,12 @@ import 'package:choose_the_svg/svg/svg_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+const images = [
+  'lib/assets/images/monitor.png',
+  'lib/assets/images/flower.png',
+  'lib/assets/images/snowman.png'
+];
+
 class SvgScreen extends StatelessWidget {
   const SvgScreen({Key? key}) : super(key: key);
 
@@ -20,7 +26,7 @@ class SvgScreen extends StatelessWidget {
 
   Widget _buildBodyPart(BodySvgData bodyParts, BuildContext context) {
     return FittedBox(
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         height: 600,
         child: ClipPath(
@@ -37,7 +43,9 @@ class SvgScreen extends StatelessWidget {
               Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    print(bodyParts.index);
+                  },
                   child: Container(
                     //0xFFFF605E
                     color: Colors.transparent,
@@ -86,72 +94,18 @@ class SvgScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 10),
                 child: SingleChildScrollView(
                   child: Column(
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.blue,
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                      ),
-                    ],
+                    children: images.map(
+                      (image) {
+                        return SizedBox(
+                          width: 100,
+                          height: 150,
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Image.asset(image),
+                          ),
+                        );
+                      },
+                    ).toList(),
                   ),
                 ),
               ),

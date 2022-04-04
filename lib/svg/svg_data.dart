@@ -328,11 +328,12 @@ Color getColorByBodyPart(BodySvgData bodyPart) {
     case BodySvgData.bp_19:
       return const Color(0xFFF2F2F2);
     case BodySvgData.bp_20:
-      return const Color(0xFFCCCCCC);
+      return const Color(0xFFFFFFFF);
     case BodySvgData.bp_21:
       return const Color(0xFFCCCCCC);
     case BodySvgData.bp_22:
       return const Color(0xFFCCCCCC);
+    //Flower
     case BodySvgData.bp_23:
       return const Color(0xFFCCCCCC);
     case BodySvgData.bp_24:
