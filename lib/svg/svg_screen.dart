@@ -1,4 +1,5 @@
 import 'package:choose_the_svg/svg/svg_data.dart';
+import 'package:choose_the_svg/svg/svg_numbers.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +20,10 @@ class SvgScreen extends StatelessWidget {
       growable: true,
     );
     for (int i = 0; i < BodySvgData.values.length; i++) {
-      bodyParts[i] = _buildBodyPart(BodySvgData.values[i], context);
+      if (!snowMan.contains(BodySvgData.values[i].index) &&
+          !plants.contains(BodySvgData.values[i].index)) {
+        bodyParts[i] = _buildBodyPart(BodySvgData.values[i], context);
+      }
     }
     return bodyParts;
   }
