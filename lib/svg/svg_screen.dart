@@ -110,13 +110,14 @@ class SvgScreen extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    svgDataController.verifySelectedPart(bodyParts.index);
+                    svgDataController.verifyPressedPart(bodyParts.index);
 
                     print(bodyParts.index);
                   },
                   child: Container(
                     //0xFFFF605E
-                    color: Colors.transparent,
+                    color:
+                        svgDataController.verifyModifiedColor(bodyParts.index),
                   ),
                 ),
               )
@@ -143,6 +144,7 @@ class SvgScreen extends StatelessWidget {
             svgDataController.showTableOptions,
             svgDataController.selectedTableResource,
             svgDataController.showColorsOptions,
+            svgDataController.bodyParts,
           ]),
           builder: (_, __) {
             final showTableOptions = svgDataController.showTableOptions.value;
@@ -239,36 +241,39 @@ class SvgScreen extends StatelessWidget {
                                   const EdgeInsets.only(left: 40, right: 40),
                               children: svgDataController.colors.map(
                                 (color) {
-                                  return Stack(
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 20),
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.black,
-                                            width: 0.1,
+                                  return GestureDetector(
+                                    onTap: () {
+                                      svgDataController
+                                          .verifyIndexAndUpdateColor(color);
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 20),
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.black,
+                                              width: 0.1,
+                                            ),
+                                            color: color,
                                           ),
-                                          color: color,
                                         ),
-                                        child: GestureDetector(
-                                          onTap: () {},
-                                          child: Container(),
+                                        const Positioned(
+                                          right: 37,
+                                          left: 0,
+                                          top: 5,
+                                          bottom: 0,
+                                          child: Icon(
+                                            Icons.check_circle_outline_rounded,
+                                            size: 25,
+                                            color: Colors.yellow,
+                                          ),
                                         ),
-                                      ),
-                                      const Positioned(
-                                        right: 37,
-                                        left: 0,
-                                        top: 5,
-                                        bottom: 0,
-                                        child: Icon(
-                                          Icons.check_circle_outline_rounded,
-                                          size: 25,
-                                          color: Colors.yellow,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                                 },
                               ).toList(),
