@@ -93,3 +93,7 @@ List<int> plants = [
 ];
 
 List<int> shoes = [7, 10];
+
+List<int> mat = [0];
+
+List<int> floor = [24];

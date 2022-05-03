@@ -18,4 +18,6 @@ enum bodyType {
   legs,
   plants,
   shoes,
+  mat,
+  floor,
 }

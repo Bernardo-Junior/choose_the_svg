@@ -37,95 +37,9 @@ class SvgScreen extends StatelessWidget {
       const Text(''),
       growable: true,
     );
-    for (int i = 0; i < BodySvgData.values.length; i++) {
-      if (svgDataController.selectedTableResource.value != null) {
-        switch (svgDataController.selectedTableResource.value!.type) {
-          case resourceType.monitor:
-            if (!snowMan.contains(BodySvgData.values[i].index) &&
-                !plants.contains(BodySvgData.values[i].index)) {
-              bodyParts[i] = _buildBodyPart(
-                BodySvgData.values[i],
-                context,
-              );
-            }
-            break;
-          case resourceType.snowMan:
-            if (!monitor.contains(BodySvgData.values[i].index) &&
-                !plants.contains(BodySvgData.values[i].index)) {
-              bodyParts[i] = _buildBodyPart(
-                BodySvgData.values[i],
-                context,
-              );
-            }
-            break;
-          case resourceType.plants:
-            if (!snowMan.contains(BodySvgData.values[i].index) &&
-                !monitor.contains(BodySvgData.values[i].index)) {
-              bodyParts[i] = _buildBodyPart(
-                BodySvgData.values[i],
-                context,
-              );
-            }
-            break;
-        }
-      } else {
-        if (!snowMan.contains(BodySvgData.values[i].index) &&
-            !plants.contains(BodySvgData.values[i].index) &&
-            !monitor.contains(BodySvgData.values[i].index)) {
-          bodyParts[i] = _buildBodyPart(
-            BodySvgData.values[i],
-            context,
-          );
-        }
-      }
-    }
-    return bodyParts;
-  }
-
-  bool verifyShowTableResource(int index, int i) {
-    if (!snowMan.contains(BodySvgData.values[i].index) &&
-        !plants.contains(BodySvgData.values[i].index)) {
-      return true;
-    }
-    return false;
-  }
-
-  Widget _buildBodyPart(BodySvgData bodyParts, BuildContext context) {
-    return FittedBox(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.9,
-        height: 600,
-        child: ClipPath(
-          clipBehavior: Clip.hardEdge,
-          child: Stack(
-            children: <Widget>[
-              CustomPaint(
-                size: const Size(double.infinity, double.infinity),
-                painter: PathPainter(
-                  bodyParts,
-                ),
-                child: const FittedBox(),
-              ),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    svgDataController.verifyPressedPart(bodyParts.index);
-
-                    print(bodyParts.index);
-                  },
-                  child: Container(
-                    //0xFFFF605E
-                    color:
-                        svgDataController.verifyModifiedColor(bodyParts.index),
-                  ),
-                ),
-              )
-            ],
-          ),
-          clipper: PathClipper(bodyParts),
-        ),
-      ),
+    return svgDataController.verifyBodyParts(
+      bodyParts: bodyParts,
+      context: context,
     );
   }
 
@@ -145,6 +59,7 @@ class SvgScreen extends StatelessWidget {
             svgDataController.selectedTableResource,
             svgDataController.showColorsOptions,
             svgDataController.bodyParts,
+            svgDataController.selectedIndex,
           ]),
           builder: (_, __) {
             final showTableOptions = svgDataController.showTableOptions.value;
@@ -237,9 +152,11 @@ class SvgScreen extends StatelessWidget {
                           Expanded(
                             child: GridView.count(
                               crossAxisCount: 2,
-                              padding:
-                                  const EdgeInsets.only(left: 40, right: 40),
-                              children: svgDataController.colors.map(
+                              padding: const EdgeInsets.only(
+                                left: 40,
+                                right: 40,
+                              ),
+                              children: colors.map(
                                 (color) {
                                   return GestureDetector(
                                     onTap: () {
@@ -261,17 +178,27 @@ class SvgScreen extends StatelessWidget {
                                             color: color,
                                           ),
                                         ),
-                                        const Positioned(
-                                          right: 37,
-                                          left: 0,
-                                          top: 5,
-                                          bottom: 0,
-                                          child: Icon(
-                                            Icons.check_circle_outline_rounded,
-                                            size: 25,
-                                            color: Colors.yellow,
+                                        if (svgDataController
+                                                    .selectedIndex.value !=
+                                                null &&
+                                            svgDataController
+                                                    .verifyModifiedColor(
+                                                        svgDataController
+                                                            .selectedIndex
+                                                            .value!) ==
+                                                color)
+                                          const Positioned(
+                                            right: 37,
+                                            left: 0,
+                                            top: 5,
+                                            bottom: 0,
+                                            child: Icon(
+                                              Icons
+                                                  .check_circle_outline_rounded,
+                                              size: 25,
+                                              color: Colors.yellow,
+                                            ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   );
@@ -290,75 +217,4 @@ class SvgScreen extends StatelessWidget {
       ),
     );
   }
-}
-// TODO: Colors
-// svgDataController.colors.map(
-//                             (color) {
-//                               return Stack(
-//                                 children: [
-//                                   Container(
-//                                     margin: const EdgeInsets.only(top: 20),
-//                                     width: 20,
-//                                     height: 20,
-//                                     color: color,
-//                                     child: GestureDetector(
-//                                       onTap: () {},
-//                                       child: Container(),
-//                                     ),
-//                                   ),
-//                                   // const Positioned(
-//                                   //   right: 0,
-//                                   //   left: 0,
-//                                   //   top: 20,
-//                                   //   bottom: 0,
-//                                   //   child: Icon(
-//                                   //     Icons.check_circle_outline_rounded,
-//                                   //     size: 60,
-//                                   //     color: Colors.green,
-//                                   //   ),
-//                                   // ),
-//                                 ],
-//                               );
-//                             },
-//                           ).toList(),
-
-class PathPainter extends CustomPainter {
-  final BodySvgData bodyParts;
-  PathPainter(this.bodyParts);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var path = getPathByBodyPart(bodyParts);
-    var color = getColorByBodyPart(bodyParts);
-    var isBracketLines = bodyParts.toString() == 'BodyParts.bp_75' ||
-        bodyParts.toString() == 'BodyParts.bp_74' ||
-        bodyParts.toString() == 'BodyParts.bp_76';
-
-    var isStroke = isBracketLines;
-    canvas.drawPath(
-        path,
-        Paint()
-          ..style = isStroke ? PaintingStyle.stroke : PaintingStyle.fill
-          ..color = color
-          ..strokeWidth = 2.0);
-  }
-
-  @override
-  bool shouldRepaint(PathPainter oldDelegate) => true;
-
-  @override
-  bool shouldRebuildSemantics(PathPainter oldDelegate) => false;
-}
-
-class PathClipper extends CustomClipper<Path> {
-  final BodySvgData bodyParts;
-  PathClipper(this.bodyParts);
-
-  @override
-  Path getClip(Size size) {
-    return getPathByBodyPart(bodyParts);
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
