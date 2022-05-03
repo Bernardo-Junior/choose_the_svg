@@ -69,7 +69,7 @@ class SvgScreen extends StatelessWidget {
                 Positioned(
                   right: 0,
                   left: (MediaQuery.of(context).size.width / 3),
-                  top: 20,
+                  top: 27,
                   bottom: 0,
                   child: const Text(
                     'Selecione a parte que você quer customizar:',
@@ -139,7 +139,7 @@ class SvgScreen extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.only(
                               right: 35,
-                              top: 9,
+                              top: 15,
                             ),
                             child: const Text(
                               'Selecione a cor',
